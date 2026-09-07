@@ -4,7 +4,6 @@ import {
   CheckCircle2,
   XCircle,
   ArrowRight,
-  Sparkles,
 } from 'lucide-react';
 
 interface ProblemStatementPageProps {
@@ -452,7 +451,6 @@ export const ProblemStatementPage: React.FC<ProblemStatementPageProps> = ({ onLa
             Launch the clinical workbench to see how SutraMind handles structured baseline assessment and eCRF locking.
           </p>
           <button className="saas-btn-gold" onClick={onLaunchApp}>
-            <Sparkles size={18} />
             <span>Launch CTMS Platform</span>
             <ArrowRight size={16} />
           </button>

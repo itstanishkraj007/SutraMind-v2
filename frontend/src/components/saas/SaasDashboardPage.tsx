@@ -15,7 +15,6 @@ import {
   Pill,
   AlertCircle,
   ArrowRight,
-  Sparkles,
   Search,
 } from 'lucide-react';
 
@@ -478,7 +477,6 @@ export const SaasDashboardPage: React.FC<SaasDashboardPageProps> = ({ onLaunchAp
             Log in with any of the 6 pre-configured demo roles with one click.
           </p>
           <button className="saas-btn-gold" onClick={onLaunchApp}>
-            <Sparkles size={18} />
             <span>{t.openFullCtms}</span>
             <ArrowRight size={16} />
           </button>

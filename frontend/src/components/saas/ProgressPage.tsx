@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   CheckCircle2,
   Clock,
-  Sparkles,
   BrainCircuit,
   Share2,
   FileCheck2,
@@ -364,7 +363,6 @@ export const ProgressPage: React.FC<ProgressPageProps> = ({ onLaunchApp, lang })
 
             {activePhase === 'phase1' && (
               <button className="saas-btn-gold" onClick={onLaunchApp} style={{ padding: '8px 18px', fontSize: '0.88rem' }}>
-                <Sparkles size={16} />
                 <span>Test Live Prototype</span>
               </button>
             )}

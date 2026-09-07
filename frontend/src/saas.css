@@ -27,10 +27,10 @@
   --saas-radius-lg: 20px;
   --saas-radius-xl: 28px;
 
-  --saas-shadow-sm: 0 2px 8px rgba(15, 89, 83, 0.04);
-  --saas-shadow-md: 0 8px 24px rgba(15, 89, 83, 0.08);
-  --saas-shadow-lg: 0 16px 40px rgba(15, 89, 83, 0.12);
-  --saas-shadow-glow: 0 0 30px rgba(22, 122, 114, 0.25);
+  --saas-shadow-sm: 0 1px 3px rgba(15, 89, 83, 0.06), 0 1px 2px rgba(15, 89, 83, 0.04);
+  --saas-shadow-md: 0 4px 14px rgba(15, 89, 83, 0.07), 0 2px 6px rgba(15, 89, 83, 0.04);
+  --saas-shadow-lg: 0 12px 32px rgba(15, 89, 83, 0.09), 0 4px 12px rgba(15, 89, 83, 0.05);
+  --saas-shadow-glow: 0 8px 28px rgba(15, 89, 83, 0.08);
 }
 
 /* Base Layout */
@@ -52,27 +52,12 @@
 
 /* Animations */
 @keyframes saasFadeIn {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes saasPulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.75; transform: scale(1.04); }
-}
-
-@keyframes saasFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-@keyframes saasGlow {
-  0%, 100% { box-shadow: 0 0 20px rgba(22, 122, 114, 0.2); }
-  50% { box-shadow: 0 0 35px rgba(197, 155, 39, 0.35); }
-}
-
 .saas-animate-fade {
-  animation: saasFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: saasFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Header */
@@ -195,23 +180,23 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, var(--saas-primary), var(--saas-primary-dark));
+  background: var(--saas-primary);
   color: #ffffff;
   font-weight: 600;
   font-size: 0.92rem;
   padding: 10px 20px;
   border-radius: var(--saas-radius-sm);
-  border: none;
+  border: 1px solid var(--saas-primary-dark);
   cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 14px rgba(15, 89, 83, 0.25);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(15, 89, 83, 0.15);
   text-decoration: none;
 }
 
 .saas-btn-primary:hover {
-  background: linear-gradient(135deg, var(--saas-primary-light), var(--saas-primary));
-  box-shadow: 0 6px 20px rgba(15, 89, 83, 0.35);
+  background: var(--saas-primary-dark);
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(15, 89, 83, 0.25);
 }
 
 .saas-btn-secondary {
@@ -226,13 +211,13 @@
   border-radius: var(--saas-radius-sm);
   border: 1px solid var(--saas-border);
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
   text-decoration: none;
 }
 
 .saas-btn-secondary:hover {
   border-color: var(--saas-primary);
-  background: var(--saas-primary-soft);
+  background: var(--saas-surface-muted);
   transform: translateY(-1px);
 }
 
@@ -240,23 +225,23 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, var(--saas-gold), var(--saas-gold-dark));
+  background: var(--saas-primary-dark);
   color: #ffffff;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.96rem;
   padding: 12px 24px;
   border-radius: var(--saas-radius-sm);
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 16px rgba(197, 155, 39, 0.3);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(9, 57, 53, 0.25);
   text-decoration: none;
 }
 
 .saas-btn-gold:hover {
-  background: linear-gradient(135deg, var(--saas-gold-light), var(--saas-gold));
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(197, 155, 39, 0.4);
+  background: var(--saas-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(9, 57, 53, 0.3);
 }
 
 /* Badge Pill */
@@ -280,39 +265,25 @@
   height: 8px;
   border-radius: 50%;
   background: #10b981;
-  animation: saasPulse 2s infinite ease-in-out;
 }
 
 /* Hero Section */
 .saas-hero {
-  padding: 72px 0 64px;
+  padding: 64px 0 56px;
   position: relative;
   overflow: hidden;
-}
-
-.saas-hero::before {
-  content: '';
-  position: absolute;
-  top: -120px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 800px;
-  height: 400px;
-  background: radial-gradient(ellipse at center, rgba(15, 89, 83, 0.08) 0%, rgba(250, 248, 244, 0) 70%);
-  pointer-events: none;
-  z-index: 0;
 }
 
 .saas-hero-content {
   position: relative;
   z-index: 1;
   text-align: center;
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
 }
 
 .saas-hero-title {
-  font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+  font-size: clamp(2.4rem, 4.8vw, 3.8rem);
   font-weight: 850;
   line-height: 1.15;
   letter-spacing: -0.03em;
@@ -321,16 +292,18 @@
 }
 
 .saas-hero-title span.highlight {
-  background: linear-gradient(135deg, var(--saas-primary-light), var(--saas-gold-dark));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--saas-primary);
+  text-decoration: underline;
+  text-decoration-color: var(--saas-gold);
+  text-underline-offset: 6px;
+  text-decoration-thickness: 3px;
 }
 
 .saas-hero-desc {
-  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  font-size: clamp(1.05rem, 1.8vw, 1.22rem);
   color: var(--saas-text-muted);
   line-height: 1.6;
-  max-width: 760px;
+  max-width: 800px;
   margin: 0 auto 32px;
 }
 
@@ -340,53 +313,54 @@
   justify-content: center;
   gap: 16px;
   flex-wrap: wrap;
-  margin-bottom: 48px;
+  margin-bottom: 44px;
 }
 
 /* Hero Preview Card / Live Mockup */
 .saas-hero-preview {
-  margin-top: 20px;
+  margin-top: 16px;
   background: var(--saas-surface);
   border-radius: var(--saas-radius-lg);
   border: 1px solid var(--saas-border);
-  box-shadow: var(--saas-shadow-lg), var(--saas-shadow-glow);
+  box-shadow: var(--saas-shadow-lg);
   padding: 16px;
   position: relative;
   text-align: left;
-  transition: transform 0.3s ease;
-}
-
-.saas-hero-preview:hover {
-  transform: translateY(-4px);
 }
 
 .saas-mockup-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 16px;
+  padding: 12px 18px;
   background: var(--saas-surface-muted);
   border-radius: var(--saas-radius-md) var(--saas-radius-md) 0 0;
   border-bottom: 1px solid var(--saas-border);
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-.saas-mockup-dots {
+.saas-protocol-meta {
   display: flex;
-  gap: 6px;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--saas-primary-dark);
 }
 
-.saas-mockup-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
+.saas-protocol-badge {
+  background: var(--saas-primary-soft);
+  color: var(--saas-primary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
 }
-
-.saas-mockup-dot.red { background: #ef4444; }
-.saas-mockup-dot.yellow { background: #f59e0b; }
-.saas-mockup-dot.green { background: #10b981; }
 
 .saas-mockup-title {
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 600;
   color: var(--saas-text-muted);
 }
@@ -930,5 +904,177 @@
   .saas-hero-ctas button {
     width: 100%;
     justify-content: center;
+  }
+}
+
+/* Institutional Regulatory & Standards Trust Bar */
+.saas-trust-bar {
+  margin: 32px 0 64px;
+  background: var(--saas-surface);
+  border: 1px solid var(--saas-border);
+  border-radius: var(--saas-radius-md);
+  padding: 24px 28px;
+  box-shadow: var(--saas-shadow-sm);
+}
+
+.saas-trust-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--saas-border);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.saas-trust-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--saas-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.saas-trust-audit {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #16a34a;
+  background: #dcfce7;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.saas-trust-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.saas-trust-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.saas-trust-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--saas-primary-dark);
+}
+
+.saas-trust-desc {
+  font-size: 0.82rem;
+  color: var(--saas-text-muted);
+  line-height: 1.45;
+}
+
+/* Side-by-Side Clinical Differentiation: Free Text Trap vs SutraMind Schema */
+.saas-diff-container {
+  margin: 40px 0;
+}
+
+.saas-diff-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: stretch;
+}
+
+.saas-diff-card {
+  background: var(--saas-surface);
+  border-radius: var(--saas-radius-md);
+  border: 1px solid var(--saas-border);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.saas-diff-card.negative {
+  border-left: 4px solid #ef4444;
+  background: #fdfaf9;
+}
+
+.saas-diff-card.positive {
+  border-left: 4px solid #0f5953;
+  background: #ffffff;
+  box-shadow: var(--saas-shadow-md);
+}
+
+.saas-diff-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 4px;
+  width: fit-content;
+  margin-bottom: 12px;
+}
+
+.saas-diff-badge.red {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.saas-diff-badge.teal {
+  background: #ccfbf1;
+  color: #0f766e;
+}
+
+.saas-diff-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--saas-primary-dark);
+  margin-bottom: 8px;
+}
+
+.saas-diff-sub {
+  font-size: 0.88rem;
+  color: var(--saas-text-muted);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.saas-diff-preview {
+  background: #ffffff;
+  border: 1px solid var(--saas-border);
+  border-radius: var(--saas-radius-sm);
+  padding: 16px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.82rem;
+  color: #334155;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+.saas-diff-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.saas-diff-point {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.88rem;
+  color: var(--saas-text);
+  line-height: 1.45;
+}
+
+@media (max-width: 840px) {
+  .saas-diff-grid {
+    grid-template-columns: 1fr;
   }
 }

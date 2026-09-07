@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, ExternalLink, Globe, Menu, X } from 'lucide-react';
+import { ExternalLink, Globe, Menu, X } from 'lucide-react';
 
 interface SaasHeaderProps {
   activePage: 'home' | 'dashboard' | 'problem' | 'progress';
@@ -103,7 +103,6 @@ export const SaasHeader: React.FC<SaasHeaderProps> = ({
               onClick={onLaunchApp}
               title="Launch CTMS Clinical Workbench"
             >
-              <Sparkles size={16} />
               <span>{t.launchApp}</span>
               <ExternalLink size={14} />
             </button>

@@ -73,7 +73,7 @@ export const SaasFooter: React.FC<SaasFooterProps> = ({ onNavigate, onLaunchApp,
               <li><button onClick={() => onNavigate('progress')}>{t.progress}</button></li>
               <li>
                 <button onClick={onLaunchApp} style={{ color: 'var(--saas-gold-light)', fontWeight: 700 }}>
-                  ✦ {t.launch}
+                  → {t.launch}
                 </button>
               </li>
             </ul>
