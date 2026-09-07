@@ -31,5 +31,6 @@ frontend/.env.*.local
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-
+# Cloned repository folders
+SutraMind-v1/
+"Sutramind v1"/
