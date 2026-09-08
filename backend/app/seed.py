@@ -25,7 +25,16 @@ def get_or_create_user(db, name: str, email: str, role: str) -> User:
 
 
 def seed_master_terms(db) -> int:
-    path = Path(__file__).resolve().parents[2] / "INFO" / "reference-data" / "ayurveda-master-dictionary.json"
+    candidates = [
+        Path(__file__).resolve().parents[2] / "INFO" / "reference-data" / "ayurveda-master-dictionary.json",
+        Path(__file__).resolve().parents[1] / "INFO" / "reference-data" / "ayurveda-master-dictionary.json",
+        Path("/INFO/reference-data/ayurveda-master-dictionary.json"),
+        Path("/app/INFO/reference-data/ayurveda-master-dictionary.json"),
+        Path.cwd() / "INFO" / "reference-data" / "ayurveda-master-dictionary.json",
+    ]
+    path = next((p for p in candidates if p.exists()), None)
+    if not path:
+        return 0
     payload = json.loads(path.read_text())
     created = 0
     for item in payload["terms"]:

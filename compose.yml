@@ -21,6 +21,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
+    volumes:
+      - ./INFO:/INFO:ro
     environment:
       DATABASE_URL: postgresql+psycopg://sutramind:sutramind_local_only@db:5432/sutramind
       JWT_SECRET: sutramind-production-secret-change-me-later
