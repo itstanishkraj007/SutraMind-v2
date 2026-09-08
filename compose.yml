@@ -15,6 +15,20 @@ services:
       timeout: 5s
       retries: 10
 
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://sutramind:sutramind_local_only@db:5432/sutramind
+      JWT_SECRET: sutramind-production-secret-change-me-later
+      CORS_ORIGINS: http://localhost:5173,https://localhost:3000
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
 volumes:
   sutramind_pgdata:
-
