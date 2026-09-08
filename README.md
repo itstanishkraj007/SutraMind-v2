@@ -1,4 +1,4 @@
-# SutraMind v1 — Smart CTMS for Ayurveda
+# SutraMind v2 — Smart CTMS for Ayurveda (Anti-AI Edition)
 
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![React](https://img.shields.io/badge/Frontend-React%2019-61DAFB.svg?logo=react&logoColor=black)](https://react.dev)
