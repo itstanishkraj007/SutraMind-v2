@@ -190,6 +190,30 @@ export default function App() {
           <header className="top-header">
             <button className="icon-button mobile-menu" aria-label="Open menu"><Menu size={21} /></button>
             <div className="search-box"><Search size={17} /><span>{t.search}</span></div>
+            <a
+              href="/downloads/SutraMind-Windows-Setup-v1.0.exe"
+              download
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                background: "#0f172a",
+                color: "#ffffff",
+                padding: "6px 12px",
+                borderRadius: "6px",
+                fontSize: "0.8rem",
+                fontWeight: 600,
+                textDecoration: "none",
+                marginLeft: "auto",
+                marginRight: "12px",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.1)"
+              }}
+              title="Download Windows Offline CTMS Client (.exe)"
+            >
+              <span>💻</span>
+              <span>Windows App (.exe)</span>
+              <span style={{ fontSize: "10px", background: "#0d9488", color: "#fff", padding: "1px 4px", borderRadius: "3px" }}>Offline Sync</span>
+            </a>
             <div className="header-actions"><button className="language-switch" onClick={toggleLanguage}><Globe2 size={16} /> {t.language}</button><button className="icon-button" aria-label="Notifications"><Bell size={18} /></button><div className="avatar">{initials(user.name)}</div><div className="profile-summary"><strong>{user.name}</strong><span>{roleLabel[user.role]}</span></div><button className="icon-button" onClick={signOut} aria-label={t.signOut}><LogOut size={18} /></button></div>
           </header>
           <section className="content">
@@ -239,18 +263,18 @@ function Login({ language, toggleLanguage, onLogin, onReturnToSaas }: { language
   };
 
   const demoAccounts = [
-    { role: "PI", email: "pi@sutramind.local", label: "Principal Investigator" },
-    { role: "Coordinator", email: "coordinator@sutramind.local", label: "Study Coordinator" },
-    { role: "Monitor", email: "monitor@sutramind.local", label: "Monitor (CRA)" },
-    { role: "Ethics", email: "ethics@sutramind.local", label: "Ethics Committee" },
-    { role: "Admin", email: "admin@sutramind.local", label: "Administrator" },
-    { role: "PV", email: "pv@sutramind.local", label: "Pharmacovigilance" },
+    { role: "ADMIN", email: "admin@sutramind.local", label: "Admin", subtitle: "System Administration & Audit", icon: "👤" },
+    { role: "PI", email: "pi@sutramind.local", label: "Principal Investigator", subtitle: "Trial Lead & Protocol Designer", icon: "🔬" },
+    { role: "COORDINATOR", email: "coordinator@sutramind.local", label: "Study Coordinator", subtitle: "Field CRC / OPD Vitals & eCRF", icon: "📋" },
+    { role: "MONITOR", email: "monitor@sutramind.local", label: "Monitor (CRA)", subtitle: "Quality & SDV Verification", icon: "🔍" },
+    { role: "ETHICS", email: "ethics@sutramind.local", label: "Ethics Committee", subtitle: "IEC Protocol Scrutiny & Clearance", icon: "⚖️" },
+    { role: "PV", email: "pv@sutramind.local", label: "PV Officer", subtitle: "Pharmacovigilance & 24h SAE Alerts", icon: "💊" },
   ];
 
   return <div className="login-page">
     <section className="login-identity"><div className="botanical-orb orb-one" /><div className="botanical-orb orb-two" /><img src="/brand/sutramind-logo.png" alt="SutraMind — Smart CTMS for Ayurveda" /><div className="identity-copy"><Sprout size={22} /><h1>Smart CTMS for Ayurveda</h1><p>{t.welcome}</p></div><blockquote>“सर्वे भवन्तु सुखिनः”<span>Let research bring wellness to all.</span></blockquote></section>
     <section className="login-panel">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", maxWidth: "440px", marginBottom: "12px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", maxWidth: "520px", marginBottom: "12px" }}>
         {onReturnToSaas && (
           <button type="button" onClick={onReturnToSaas} style={{ background: "none", border: "none", color: "var(--primary-color)", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer" }}>
             ← Back to SaaS Website
@@ -258,39 +282,67 @@ function Login({ language, toggleLanguage, onLogin, onReturnToSaas }: { language
         )}
         <button className="language-switch login-language" onClick={toggleLanguage}><Globe2 size={16} /> {t.language}</button>
       </div>
-      <div className="login-card">
+      <div className="login-card" style={{ maxWidth: "520px" }}>
         <div className="leaf-seal"><Leaf /></div>
         <h2>{t.signIn}</h2>
-        <p>Select any clinical demo role below for instant pre-fill:</p>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "16px" }}>
-          {demoAccounts.map((acc) => (
-            <button
-              key={acc.role}
-              type="button"
-              onClick={() => { setEmail(acc.email); setPassword("Demo@123"); }}
-              style={{
-                background: email === acc.email ? "var(--primary-color)" : "rgba(15, 89, 83, 0.08)",
-                color: email === acc.email ? "#ffffff" : "var(--primary-color)",
-                border: "1px solid rgba(15, 89, 83, 0.2)",
-                borderRadius: "6px",
-                padding: "4px 8px",
-                fontSize: "12px",
-                fontWeight: 600,
-                cursor: "pointer",
-                transition: "all 0.15s ease",
-              }}
-            >
-              {acc.role}
-            </button>
-          ))}
+        <p style={{ marginBottom: "12px", fontSize: "0.84rem", color: "#64748b" }}>
+          Select your clinical role to authenticate into the workstation:
+        </p>
+
+        {/* 3x2 Rectangular Grid */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "8px", marginBottom: "18px" }}>
+          {demoAccounts.map((acc) => {
+            const isSelected = email === acc.email;
+            return (
+              <button
+                key={acc.role}
+                type="button"
+                onClick={() => { setEmail(acc.email); setPassword("Demo@123"); }}
+                style={{
+                  textAlign: "left",
+                  padding: "10px 10px",
+                  borderRadius: "8px",
+                  border: isSelected ? "2px solid var(--primary-color)" : "1px solid rgba(15, 89, 83, 0.18)",
+                  background: isSelected ? "rgba(15, 89, 83, 0.08)" : "#ffffff",
+                  cursor: "pointer",
+                  transition: "all 0.15s ease",
+                  boxShadow: isSelected ? "0 2px 6px rgba(15, 89, 83, 0.12)" : "none",
+                }}
+              >
+                <div style={{ fontSize: "1.25rem", marginBottom: "2px" }}>{acc.icon}</div>
+                <div style={{ fontWeight: 700, fontSize: "0.8rem", color: "var(--primary-dark)", lineHeight: 1.2 }}>{acc.label}</div>
+                <div style={{ fontSize: "0.68rem", color: "#64748b", marginTop: "3px", lineHeight: 1.2 }}>{acc.subtitle}</div>
+              </button>
+            );
+          })}
         </div>
+
         <form onSubmit={submit}>
           <Field label={t.email}><input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required /></Field>
           <Field label={t.password}><input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required /></Field>
           {error && <div className="form-error">{error}</div>}
           <button className="primary-button full" disabled={pending}>{pending ? "Signing in…" : <><ShieldCheck size={17} /> {t.signIn}</>}</button>
         </form>
-        <div className="demo-hint" style={{ marginTop: "12px" }}><strong>Password:</strong> `Demo@123` across all roles</div>
+
+        <div style={{ marginTop: "16px", paddingTop: "14px", borderTop: "1px solid rgba(15, 89, 83, 0.12)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div className="demo-hint" style={{ margin: 0 }}><strong>Password:</strong> `Demo@123` across all roles</div>
+          <a
+            href="/downloads/SutraMind-Windows-Setup-v1.0.exe"
+            download
+            style={{
+              fontSize: "0.78rem",
+              fontWeight: 600,
+              color: "#0f172a",
+              textDecoration: "none",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "4px"
+            }}
+          >
+            <span>💻</span>
+            <span>Windows Desktop Client (.exe)</span>
+          </a>
+        </div>
       </div>
     </section>
   </div>;

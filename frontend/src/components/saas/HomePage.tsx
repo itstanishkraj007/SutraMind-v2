@@ -427,6 +427,29 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onLaunchApp, lan
                 <span>{t.ctaLaunch}</span>
                 <ArrowRight size={16} />
               </button>
+              <a
+                href="/downloads/SutraMind-Windows-Setup-v1.0.exe"
+                download
+                className="saas-btn-download-hero"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  background: "#0f172a",
+                  color: "#ffffff",
+                  padding: "12px 20px",
+                  borderRadius: "8px",
+                  fontWeight: 600,
+                  fontSize: "0.92rem",
+                  textDecoration: "none",
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.15)",
+                  border: "1px solid #334155",
+                  transition: "all 0.15s ease"
+                }}
+              >
+                <span>💻</span>
+                <span>Download Windows App (.exe)</span>
+              </a>
               <button className="saas-btn-secondary" onClick={() => onNavigate("problem")}>
                 <span>{t.ctaProblem}</span>
               </button>

@@ -89,6 +89,31 @@ export const SaasHeader: React.FC<SaasHeaderProps> = ({
           </nav>
 
           <div className="saas-header-actions">
+            <a
+              href="/downloads/SutraMind-Windows-Setup-v1.0.exe"
+              download
+              className="saas-btn-download"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                background: "#0f172a",
+                color: "#ffffff",
+                padding: "6px 12px",
+                borderRadius: "6px",
+                fontSize: "0.82rem",
+                fontWeight: 600,
+                textDecoration: "none",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                transition: "all 0.15s ease"
+              }}
+              title="Download Windows Desktop App (Offline Client)"
+            >
+              <span>💻</span>
+              <span>Windows App</span>
+              <span style={{ fontSize: "10px", background: "#0d9488", color: "#fff", padding: "1px 4px", borderRadius: "3px" }}>v1.0</span>
+            </a>
+
             <button
               className="saas-lang-btn"
               onClick={onToggleLang}
