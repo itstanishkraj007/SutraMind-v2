@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface SaasFooterProps {
-  onNavigate: (page: 'home' | 'dashboard' | 'problem' | 'progress') => void;
+  onNavigate: (page: 'home' | 'dashboard' | 'problem' | 'progress' | 'download') => void;
   onLaunchApp: () => void;
   lang: 'en' | 'hi';
 }
@@ -16,6 +16,7 @@ export const SaasFooter: React.FC<SaasFooterProps> = ({ onNavigate, onLaunchApp,
       dashboard: 'Interactive Dashboard',
       problem: 'Problem Statement & Analysis',
       progress: 'Engineering Roadmap',
+      download: 'Windows Desktop Client (.exe)',
       launch: 'Launch Clinical CTMS',
       complianceTitle: 'Standards Alignment',
       c1: 'AYUSH-GCP Guidelines',
@@ -37,6 +38,7 @@ export const SaasFooter: React.FC<SaasFooterProps> = ({ onNavigate, onLaunchApp,
       dashboard: 'इंटरैक्टिव डैशबोर्ड',
       problem: 'समस्या विवरण एवं विश्लेषण',
       progress: 'इंजीनियरिंग रोडमैप',
+      download: 'विंडोज डेस्कटॉप क्लाइंट (.exe)',
       launch: 'सीटीएमएस शुरू करें',
       complianceTitle: 'मानक संरेखण',
       c1: 'आयुष-जीसीपी दिशानिर्देश',
@@ -71,6 +73,7 @@ export const SaasFooter: React.FC<SaasFooterProps> = ({ onNavigate, onLaunchApp,
               <li><button onClick={() => onNavigate('dashboard')}>{t.dashboard}</button></li>
               <li><button onClick={() => onNavigate('problem')}>{t.problem}</button></li>
               <li><button onClick={() => onNavigate('progress')}>{t.progress}</button></li>
+              <li><button onClick={() => onNavigate('download')} style={{ color: '#0d9488', fontWeight: 600 }}>💻 {t.download}</button></li>
               <li>
                 <button onClick={onLaunchApp} style={{ color: 'var(--saas-gold-light)', fontWeight: 700 }}>
                   → {t.launch}

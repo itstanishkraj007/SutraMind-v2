@@ -13,11 +13,12 @@ import { SaasDashboardPage } from "./components/saas/SaasDashboardPage";
 import { ProblemStatementPage } from "./components/saas/ProblemStatementPage";
 import { ProgressPage } from "./components/saas/ProgressPage";
 import { SaasFooter } from "./components/saas/SaasFooter";
+import { WindowsDownloadPage } from "./components/saas/WindowsDownloadPage";
 
 type Language = "en" | "hi";
 type Page = "dashboard" | "studies" | "participants" | "participant" | "visits" | "queries" | "ethics" | "admin";
 type ViewMode = "saas" | "app";
-type SaasPage = "home" | "dashboard" | "problem" | "progress";
+type SaasPage = "home" | "dashboard" | "problem" | "progress" | "download";
 type TranslationMap = Record<keyof typeof text.en, string>;
 
 const text = {
@@ -137,6 +138,7 @@ export default function App() {
         {saasPage === "dashboard" && <SaasDashboardPage onLaunchApp={() => setViewMode("app")} lang={language} />}
         {saasPage === "problem" && <ProblemStatementPage onLaunchApp={() => setViewMode("app")} lang={language} />}
         {saasPage === "progress" && <ProgressPage onLaunchApp={() => setViewMode("app")} lang={language} />}
+        {saasPage === "download" && <WindowsDownloadPage onLaunchApp={() => setViewMode("app")} lang={language} />}
         <SaasFooter onNavigate={setSaasPage} onLaunchApp={() => setViewMode("app")} lang={language} />
       </div>
     );

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { ExternalLink, Globe, Menu, X } from 'lucide-react';
 
 interface SaasHeaderProps {
-  activePage: 'home' | 'dashboard' | 'problem' | 'progress';
-  onNavigate: (page: 'home' | 'dashboard' | 'problem' | 'progress') => void;
+  activePage: 'home' | 'dashboard' | 'problem' | 'progress' | 'download';
+  onNavigate: (page: 'home' | 'dashboard' | 'problem' | 'progress' | 'download') => void;
   onLaunchApp: () => void;
   lang: 'en' | 'hi';
   onToggleLang: () => void;
@@ -28,6 +28,7 @@ export const SaasHeader: React.FC<SaasHeaderProps> = ({
       dashboard: 'Live Dashboard',
       problem: 'Problem Statement',
       progress: 'Roadmap & Progress',
+      download: 'Windows App (.exe)',
       launchApp: isAuthenticated ? 'Open Clinical App' : 'Launch CTMS Platform',
     },
     hi: {
@@ -37,11 +38,12 @@ export const SaasHeader: React.FC<SaasHeaderProps> = ({
       dashboard: 'लाइव डैशबोर्ड',
       problem: 'समस्या विवरण (PS)',
       progress: 'प्रगति एवं रोडमैप',
+      download: 'विंडोज ऐप (.exe)',
       launchApp: isAuthenticated ? 'क्लिनिकल ऐप खोलें' : 'सीटीएमएस शुरू करें',
     },
   }[lang];
 
-  const handleNav = (page: 'home' | 'dashboard' | 'problem' | 'progress') => {
+  const handleNav = (page: 'home' | 'dashboard' | 'problem' | 'progress' | 'download') => {
     onNavigate(page);
     setMobileMenuOpen(false);
   };
@@ -85,6 +87,14 @@ export const SaasHeader: React.FC<SaasHeaderProps> = ({
               onClick={() => handleNav('progress')}
             >
               {t.progress}
+            </button>
+            <button
+              className={`saas-nav-link ${activePage === 'download' ? 'active' : ''}`}
+              onClick={() => handleNav('download')}
+              style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}
+            >
+              <span>💻</span>
+              <span>{t.download}</span>
             </button>
           </nav>
 
