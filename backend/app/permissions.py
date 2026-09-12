@@ -18,8 +18,8 @@ PERMISSIONS: dict[str, set[str]] = {
         "dashboard:read", "master:read",
     },
     "MONITOR": {"study:read", "participant:read", "visit:read", "crf:read", "query:read", "query:raise", "dashboard:read", "master:read"},
-    "ETHICS": {"study:read", "ethics:read", "ethics:write"},
-    "PV": {"study:read", "ethics:read", "dashboard:read"},
+    "ETHICS": {"study:read", "ethics:read", "ethics:write", "dashboard:read"},
+    "PV": {"study:read", "ethics:read", "dashboard:read", "query:read"},
 }
 
 
@@ -30,7 +30,7 @@ def require_permission(user: User, permission: str) -> None:
 
 
 def accessible_study_ids(db: Session, user: User) -> set[str]:
-    if user.role == "ADMIN":
+    if user.role in {"ADMIN", "ETHICS", "PV"}:
         return set(db.scalars(select(Study.id)).all())
     ids = set(db.scalars(select(Study.id).where(Study.pi_id == user.id)).all())
     ids.update(

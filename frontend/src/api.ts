@@ -45,7 +45,9 @@ export const api = {
   updateQuery: (token: string, id: string, payload: unknown) => request<DataQuery>(`/queries/${id}`, token, { method: "PATCH", body: JSON.stringify(payload) }),
   dashboard: (token: string, studyId?: string) => request<Dashboard>(`/dashboard/overview${studyId ? `?study_id=${studyId}` : ""}`, token),
   updateEthics: (token: string, studyId: string, payload: unknown) => request<Ethics>(`/ethics/${studyId}`, token, { method: "PATCH", body: JSON.stringify(payload) }),
-  createUser: (token: string, payload: unknown) => request<User>("/users", token, { method: "POST", body: JSON.stringify(payload) })
+  users: (token: string) => request<User[]>("/users", token),
+  createUser: (token: string, payload: unknown) => request<User>("/users", token, { method: "POST", body: JSON.stringify(payload) }),
+  updateUser: (token: string, id: string, payload: unknown) => request<User>(`/users/${id}`, token, { method: "PATCH", body: JSON.stringify(payload) })
 };
 
 export type Role = "ADMIN" | "PI" | "COORDINATOR" | "MONITOR" | "ETHICS" | "PV";

@@ -676,6 +676,29 @@ def create_user(payload: UserCreate, current_user: User = Depends(get_current_us
     return data(user_view(user))
 
 
+@app.get("/api/v1/users")
+def list_users(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)) -> dict:
+    require_permission(current_user, "user:manage")
+    users = db.scalars(select(User).order_by(User.name.asc())).all()
+    return data([user_view(u) for u in users])
+
+
+@app.patch("/api/v1/users/{user_id}")
+def update_user(user_id: str, payload: dict, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)) -> dict:
+    require_permission(current_user, "user:manage")
+    user = db.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    if "is_active" in payload:
+        user.is_active = bool(payload["is_active"])
+    if "name" in payload and payload["name"]:
+        user.name = payload["name"].strip()
+    if "role" in payload and payload["role"]:
+        user.role = payload["role"].strip().upper()
+    db.commit()
+    return data(user_view(user))
+
+
 import os
 from fastapi.responses import FileResponse
 
