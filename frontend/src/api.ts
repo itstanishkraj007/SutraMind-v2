@@ -1,4 +1,18 @@
-const API_BASE_URL = (import.meta as unknown as { env?: { VITE_API_BASE_URL?: string } }).env?.VITE_API_BASE_URL ?? "http://localhost:8000/api/v1";
+export function getApiBaseUrl(): string {
+  try {
+    const envUrl = (import.meta as unknown as { env?: { VITE_API_BASE_URL?: string } }).env?.VITE_API_BASE_URL;
+    if (envUrl) return envUrl;
+  } catch {}
+
+  if (typeof window !== "undefined") {
+    const host = window.location.hostname;
+    if (host && host !== "localhost" && host !== "127.0.0.1") {
+      return "https://177-71-146-106.sslip.io/api/v1";
+    }
+  }
+
+  return "http://localhost:8000/api/v1";
+}
 
 export type ApiEnvelope<T> = { data: T; meta?: Record<string, unknown> };
 
@@ -14,7 +28,8 @@ export async function request<T>(path: string, token?: string, options: RequestI
   const headers = new Headers(options.headers);
   headers.set("Content-Type", "application/json");
   if (token) headers.set("Authorization", `Bearer ${token}`);
-  const response = await fetch(`${API_BASE_URL}${path}`, { ...options, headers });
+  const baseUrl = getApiBaseUrl();
+  const response = await fetch(`${baseUrl}${path}`, { ...options, headers });
   const body = await response.json().catch(() => ({}));
   if (!response.ok) throw new ApiError(response.status, body.detail ?? "The request could not be completed.");
   return body.data as T;

@@ -1,7 +1,11 @@
 {
   "rewrites": [
     {
-      "source": "/((?!downloads/|brand/|assets/).*)",
+      "source": "/api/v1/:path*",
+      "destination": "https://177-71-146-106.sslip.io/api/v1/:path*"
+    },
+    {
+      "source": "/((?!downloads/|brand/|assets/|api/).*)",
       "destination": "/"
     }
   ]

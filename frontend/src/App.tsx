@@ -136,7 +136,14 @@ export default function App() {
   const [token, setToken] = useState(() => localStorage.getItem("sutramind_token") ?? "");
   const [user, setUser] = useState<CurrentUser | null>(null);
   const [language, setLanguage] = useState<Language>(() => (localStorage.getItem("sutramind_language") as Language) ?? "en");
-  const [viewMode, setViewMode] = useState<ViewMode>("saas");
+  const [viewMode, setViewMode] = useState<ViewMode>(() => {
+    if (typeof window !== "undefined") {
+      if (window.location.hash === "#app" || window.location.search.includes("mode=app")) {
+        return "app";
+      }
+    }
+    return "saas";
+  });
   const [saasPage, setSaasPage] = useState<SaasPage>("home");
   const [page, setPage] = useState<Page>("dashboard");
   const [studies, setStudies] = useState<Study[]>([]);
@@ -158,10 +165,32 @@ export default function App() {
     return next;
   });
 
+  const openApp = () => {
+    if (typeof window !== "undefined") {
+      window.location.hash = "#app";
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+    setViewMode("app");
+  };
+
+  const returnToSaas = () => {
+    if (typeof window !== "undefined") {
+      window.location.hash = "";
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+    setViewMode("saas");
+  };
+
   const signOut = () => {
     localStorage.removeItem("sutramind_token");
-    setToken(""); setUser(null); setStudies([]); setParticipants([]); setQueries([]); setDashboard(null); setPage("dashboard");
-    setViewMode("saas");
+    setToken("");
+    setUser(null);
+    setStudies([]);
+    setParticipants([]);
+    setQueries([]);
+    setDashboard(null);
+    setPage("dashboard");
+    // Leave user on login workstation view if already in app mode
   };
 
   const refresh = async (overrideStudyId?: string) => {
@@ -185,6 +214,19 @@ export default function App() {
   };
 
   useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash;
+      if (hash === "#app") {
+        setViewMode("app");
+      } else if (!hash || hash === "#" || hash === "#saas") {
+        setViewMode("saas");
+      }
+    };
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
+  }, []);
+
+  useEffect(() => {
     if (!token) return;
     api.me(token).then((me) => { setUser(me); setPage(me.role === "ETHICS" ? "ethics" : "dashboard"); }).catch(signOut);
   }, [token]);
@@ -192,10 +234,19 @@ export default function App() {
   useEffect(() => { if (user) void refresh(); /* selected study controls all contextual data */ // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, selectedStudyId]);
 
+  useEffect(() => {
+    if (user) {
+      const allowed = navItems(user.role, text[language]).map((item) => item.page);
+      if (!allowed.includes(page) && page !== "participant") {
+        setPage(allowed[0] || "dashboard");
+      }
+    }
+  }, [user?.role, page, language]);
+
   const handleLogin = (newToken: string) => {
     localStorage.setItem("sutramind_token", newToken);
     setToken(newToken);
-    setViewMode("app");
+    openApp();
   };
   const navigateParticipant = (participantId: string) => { setSelectedParticipantId(participantId); setPage("participant"); };
 
@@ -206,17 +257,17 @@ export default function App() {
         <SaasHeader
           activePage={saasPage}
           onNavigate={setSaasPage}
-          onLaunchApp={() => setViewMode("app")}
+          onLaunchApp={openApp}
           lang={language}
           onToggleLang={toggleLanguage}
           isAuthenticated={Boolean(token && user)}
         />
-        {saasPage === "home" && <HomePage onNavigate={setSaasPage} onLaunchApp={() => setViewMode("app")} lang={language} />}
-        {saasPage === "dashboard" && <SaasDashboardPage onLaunchApp={() => setViewMode("app")} lang={language} />}
-        {saasPage === "problem" && <ProblemStatementPage onLaunchApp={() => setViewMode("app")} lang={language} />}
-        {saasPage === "progress" && <ProgressPage onLaunchApp={() => setViewMode("app")} lang={language} />}
-        {saasPage === "download" && <WindowsDownloadPage onLaunchApp={() => setViewMode("app")} lang={language} />}
-        <SaasFooter onNavigate={setSaasPage} onLaunchApp={() => setViewMode("app")} lang={language} />
+        {saasPage === "home" && <HomePage onNavigate={setSaasPage} onLaunchApp={openApp} lang={language} />}
+        {saasPage === "dashboard" && <SaasDashboardPage onLaunchApp={openApp} lang={language} />}
+        {saasPage === "problem" && <ProblemStatementPage onLaunchApp={openApp} lang={language} />}
+        {saasPage === "progress" && <ProgressPage onLaunchApp={openApp} lang={language} />}
+        {saasPage === "download" && <WindowsDownloadPage onLaunchApp={openApp} lang={language} />}
+        <SaasFooter onNavigate={setSaasPage} onLaunchApp={openApp} lang={language} />
       </div>
     );
   }
@@ -227,11 +278,11 @@ export default function App() {
       <>
         <div className="saas-app-return-bar">
           <span>🌿 SutraMind CTMS Platform • Clinical Research Sign-In</span>
-          <button className="saas-app-return-btn" onClick={() => setViewMode("saas")}>
+          <button className="saas-app-return-btn" onClick={returnToSaas}>
             ← Return to Public SaaS Website
           </button>
         </div>
-        <Login language={language} toggleLanguage={toggleLanguage} onLogin={handleLogin} onReturnToSaas={() => setViewMode("saas")} />
+        <Login language={language} toggleLanguage={toggleLanguage} onLogin={handleLogin} onReturnToSaas={returnToSaas} />
       </>
     );
   }
@@ -240,15 +291,6 @@ export default function App() {
 
   const selectedStudy = studies.find((study) => study.id === selectedStudyId) ?? studies[0];
   const nav = navItems(user.role, t);
-
-  useEffect(() => {
-    if (user) {
-      const allowedPages = nav.map((item) => item.page);
-      if (!allowedPages.includes(page) && page !== "participant") {
-        setPage(allowedPages[0] || "dashboard");
-      }
-    }
-  }, [user?.role, page, nav]);
 
   return (
     <>
@@ -265,7 +307,7 @@ export default function App() {
           <span style={{ fontSize: "11px", opacity: 0.85, background: "rgba(255,255,255,0.12)", padding: "2px 8px", borderRadius: "4px" }}>
             AWS Cloud Connected (sa-east-1)
           </span>
-          <button className="saas-app-return-btn" onClick={() => setViewMode("saas")}>
+          <button className="saas-app-return-btn" onClick={returnToSaas}>
             ← Return to Public SaaS Website
           </button>
         </div>
@@ -277,7 +319,7 @@ export default function App() {
           <nav>
             {nav.map((item) => <button key={item.page} onClick={() => setPage(item.page)} className={`nav-item ${page === item.page || (item.page === "participants" && page === "participant") ? "active" : ""}`}><item.icon size={18} /><span>{item.label}</span></button>)}
             <button
-              onClick={() => setViewMode("saas")}
+              onClick={returnToSaas}
               className="nav-item"
               style={{ marginTop: "16px", borderTop: "1px solid rgba(15, 89, 83, 0.15)", paddingTop: "12px", color: "var(--saas-gold-dark)" }}
             >
