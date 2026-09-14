@@ -26,7 +26,7 @@ services:
     environment:
       DATABASE_URL: postgresql+psycopg://sutramind:sutramind_local_only@db:5432/sutramind
       JWT_SECRET: sutramind-production-secret-change-me-later
-      CORS_ORIGINS: http://localhost:5173,https://localhost:3000
+      CORS_ORIGINS: http://localhost:5173,https://localhost:3000,https://sutramind.vercel.app
     depends_on:
       db:
         condition: service_healthy

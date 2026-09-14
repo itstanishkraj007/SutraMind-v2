@@ -28,12 +28,12 @@ def get_or_create_user(db, name: str, email: str, role: str, id_val: str = None)
 
 def seed_master_terms(db) -> int:
     candidates = [
-        Path(__file__).resolve().parents[2] / "INFO" / "reference-data" / "ayurveda-master-dictionary.json",
-        Path(__file__).resolve().parents[1] / "INFO" / "reference-data" / "ayurveda-master-dictionary.json",
         Path("/INFO/reference-data/ayurveda-master-dictionary.json"),
         Path("/app/INFO/reference-data/ayurveda-master-dictionary.json"),
         Path.cwd() / "INFO" / "reference-data" / "ayurveda-master-dictionary.json",
     ]
+    for parent in Path(__file__).resolve().parents:
+        candidates.append(parent / "INFO" / "reference-data" / "ayurveda-master-dictionary.json")
     path = next((p for p in candidates if p.exists()), None)
     if not path:
         return 0

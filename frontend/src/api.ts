@@ -2,7 +2,9 @@ export function getApiBaseUrl(): string {
   try {
     const envUrl = (import.meta as unknown as { env?: { VITE_API_BASE_URL?: string } }).env?.VITE_API_BASE_URL;
     if (envUrl) return envUrl;
-  } catch {}
+  } catch {
+    // Ignore error and fall through to host detection
+  }
 
   if (typeof window !== "undefined") {
     const host = window.location.hostname;

@@ -1,8 +1,8 @@
-import { Component, ErrorInfo, FormEvent, InputHTMLAttributes, ReactNode, SelectHTMLAttributes, useEffect, useState } from "react";
+import { Component, ErrorInfo, FormEvent, InputHTMLAttributes, ReactNode, SelectHTMLAttributes, useCallback, useEffect, useState } from "react";
 import {
-  Activity, AlertCircle, ArrowLeft, Bell, CalendarDays, Check, CheckCircle2, ChevronRight, ClipboardCheck,
+  AlertCircle, ArrowLeft, Bell, CalendarDays, Check, CheckCircle2, ChevronRight, ClipboardCheck,
   ClipboardList, Globe2, Leaf, LayoutDashboard, LoaderCircle, LogOut, Menu,
-  MessageCircleQuestion, Plus, Save, Search, Server, ShieldAlert, ShieldCheck, Sprout, UserCog, Users, X
+  MessageCircleQuestion, Plus, Save, Search, ShieldCheck, Sprout, UserCog, Users, X
 } from "lucide-react";
 import { Bar, BarChart, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { ApiError, api, CRF, CurrentUser, Dashboard, DataQuery, Ethics, MasterTerm, Medicine, Participant, Role, Study, User, Visit } from "./api";
@@ -241,7 +241,7 @@ export default function App() {
         setPage(allowed[0] || "dashboard");
       }
     }
-  }, [user?.role, page, language]);
+  }, [user, page, language]);
 
   const handleLogin = (newToken: string) => {
     localStorage.setItem("sutramind_token", newToken);
@@ -1329,7 +1329,7 @@ function UsersPage({ token, language, onRefresh }: { token: string; language: La
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [error, setError] = useState("");
 
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
@@ -1340,11 +1340,11 @@ function UsersPage({ token, language, onRefresh }: { token: string; language: La
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     void loadUsers();
-  }, [token]);
+  }, [loadUsers]);
 
   const toggleUserStatus = async (targetUser: User) => {
     setPendingId(targetUser.id);
@@ -1369,8 +1369,8 @@ function UsersPage({ token, language, onRefresh }: { token: string; language: La
     <>
       <PageHeading
         icon={<Users />}
-        title="Users & Roles Management"
-        description="System accounts, institutional role delegations, and investigator privileges across SutraMind."
+        title={language === "hi" ? "उपयोगकर्ता और भूमिका प्रबंधन" : "Users & Roles Management"}
+        description={language === "hi" ? "सूत्रमाइंड में सिस्टम खाते, संस्थागत भूमिकाएं और अन्वेषक विशेषाधिकार।" : "System accounts, institutional role delegations, and investigator privileges across SutraMind."}
         action={
           <button className="primary-button" onClick={() => setShowAddUser(true)}>
             <Plus size={16} /> New User Account
