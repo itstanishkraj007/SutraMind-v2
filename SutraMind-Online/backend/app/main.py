@@ -44,6 +44,8 @@ from app.schemas import (
 )
 
 
+from app.sync_router import router as sync_router
+
 app = FastAPI(title="SutraMind Phase 1 API", version="0.1.0")
 app.add_middleware(
     CORSMiddleware,
@@ -53,6 +55,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.include_router(sync_router)
 
 
 @app.on_event("startup")
@@ -709,18 +712,8 @@ def api_health() -> dict:
     return {"status": "ok", "service": "SutraMind CTMS Cloud Engine", "timestamp": datetime.utcnow().isoformat()}
 
 
-@app.get("/api/sync/pull")
-@app.get("/api/v1/sync/pull")
-def sync_pull(cursor: str | None = None, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)) -> dict:
-    ids = accessible_study_ids(db, current_user)
-    participants = db.scalars(select(Participant).where(Participant.study_id.in_(ids))).all() if ids else []
-    return data({"participants": [participant_view(db, p) for p in participants], "timestamp": datetime.utcnow().isoformat()})
-
-
-@app.post("/api/sync/push")
-@app.post("/api/v1/sync/push")
-def sync_push(payload: dict, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)) -> dict:
-    return data({"message": "Offline records received and reconciled successfully", "synced_by": current_user.name, "timestamp": datetime.utcnow().isoformat()})
+# Legacy sync aliases — redirect to the versioned sync router
+# The real implementation lives in app/sync_router.py (mounted as /api/v1/sync)
 
 
 @app.get("/downloads/{filename}")

@@ -14,11 +14,13 @@ from app.models import AyurvedaBaseline, CRF, DataQuery, EthicsReview, MasterTer
 DEMO_PASSWORD = "Demo@123"
 
 
-def get_or_create_user(db, name: str, email: str, role: str) -> User:
+def get_or_create_user(db, name: str, email: str, role: str, id_val: str = None) -> User:
     user = db.scalar(select(User).where(User.email == email))
     if user:
         return user
     user = User(name=name, email=email, password_hash=hash_password(DEMO_PASSWORD), role=role)
+    if id_val:
+        user.id = id_val
     db.add(user)
     db.flush()
     return user
@@ -35,7 +37,7 @@ def seed_master_terms(db) -> int:
     path = next((p for p in candidates if p.exists()), None)
     if not path:
         return 0
-    payload = json.loads(path.read_text())
+    payload = json.loads(path.read_text(encoding="utf-8"))
     created = 0
     for item in payload["terms"]:
         category = item["category"].upper()
@@ -62,8 +64,8 @@ def seed() -> dict[str, int]:
         counters = {"terms": seed_master_terms(db), "users": 0, "studies": 0, "participants": 0}
         users = {
             "ADMIN": get_or_create_user(db, "Aditi Nair", "admin@sutramind.local", "ADMIN"),
-            "PI": get_or_create_user(db, "Dr. Ananya Sharma", "pi@sutramind.local", "PI"),
-            "COORDINATOR": get_or_create_user(db, "Kavita Rao", "coordinator@sutramind.local", "COORDINATOR"),
+            "PI": get_or_create_user(db, "Dr. Ananya Sharma", "pi@sutramind.local", "PI", "22222222-2222-2222-2222-222222222222"),
+            "COORDINATOR": get_or_create_user(db, "Kavita Rao", "coordinator@sutramind.local", "COORDINATOR", "33333333-3333-3333-3333-333333333333"),
             "MONITOR": get_or_create_user(db, "Rahul Mehta", "monitor@sutramind.local", "MONITOR"),
             "ETHICS": get_or_create_user(db, "Prof. Meera Iyer", "ethics@sutramind.local", "ETHICS"),
             "PV": get_or_create_user(db, "Dr. Neha Verma", "pv@sutramind.local", "PV"),
@@ -71,13 +73,14 @@ def seed() -> dict[str, int]:
         counters["users"] = len(users)
         medicine = db.scalar(select(Medicine).where(Medicine.medicine_code == "MED001"))
         if not medicine:
-            medicine = Medicine(medicine_code="MED001", ayurveda_name="Yogaraja Guggulu", dosage_form_code="DF01")
+            medicine = Medicine(id="cccccccc-cccc-cccc-cccc-cccccccccccc", medicine_code="MED001", ayurveda_name="Yogaraja Guggulu", dosage_form_code="DF01")
             db.add(medicine)
             db.flush()
         study = db.scalar(select(Study).where(Study.study_code == "AMAVATA-001"))
         if not study:
             today = date.today()
             study = Study(
+                id="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
                 study_code="AMAVATA-001",
                 title="Yogaraja Guggulu in Amavata: an Ayurveda Clinical Trial",
                 short_title="Yogaraja Guggulu in Amavata",
@@ -93,7 +96,7 @@ def seed() -> dict[str, int]:
             db.add(study)
             db.flush()
             counters["studies"] += 1
-            site = Site(study_id=study.id, site_code="AIIA-ND", name="AIIA, New Delhi", address="New Delhi, India")
+            site = Site(id="bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb", study_id=study.id, site_code="AIIA-ND", name="AIIA, New Delhi", address="New Delhi, India")
             db.add(site)
             db.flush()
             db.add_all([
@@ -104,13 +107,13 @@ def seed() -> dict[str, int]:
                 StudyMembership(study_id=study.id, user_id=users["PV"].id, role_in_study="PV"),
             ])
             db.add(Protocol(
-                study_id=study.id, version="1.0", modern_diagnosis="Rheumatoid Arthritis", vyadhi_code="V001",
+                id="dddddddd-dddd-dddd-dddd-dddddddddddd", study_id=study.id, version="1.0", modern_diagnosis="Rheumatoid Arthritis", vyadhi_code="V001",
                 intervention_name="Yogaraja Guggulu", medicine_id=medicine.id, dosage_form_code="DF01",
                 anupana_code="AN01", treatment_duration_days=90,
                 summary="A synthetic demonstration study for structured Ayurveda research data.",
             ))
             db.add(EthicsReview(
-                study_id=study.id, iec_number="AIIA-IEC-DEMO-001", status="APPROVED",
+                id="eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee", study_id=study.id, iec_number="AIIA-IEC-DEMO-001", status="APPROVED",
                 approval_date=today - timedelta(days=28), expiry_date=today + timedelta(days=337),
                 remarks="Synthetic Phase 1 prototype ethics record.", updated_by=users["ETHICS"].id,
             ))
@@ -119,6 +122,7 @@ def seed() -> dict[str, int]:
         participant = db.scalar(select(Participant).where(Participant.study_id == study.id, Participant.participant_code == "AMV-001"))
         if not participant:
             participant = Participant(
+                id="ffffffff-ffff-ffff-ffff-ffffffffffff",
                 participant_code="AMV-001", study_id=study.id, site_id=site.id, name="Demo Participant 001",
                 age=42, gender="FEMALE", modern_diagnosis="Rheumatoid Arthritis", vyadhi_code="V001",
                 disease_duration_months=24, randomization_id="R-001", enrollment_date=date.today() - timedelta(days=21),
